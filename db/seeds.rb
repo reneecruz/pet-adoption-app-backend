@@ -11,5 +11,5 @@ require 'faker'
 
 20.times do 
     Pet.create(name: Faker::Creature::Dog.name, breed: Faker::Creature::Dog.breed, age:Faker::Creature::Dog.age, location: 
-    "NYC", img: 'https://dog.ceo/api/breeds/image/random' )
+    "NYC", img:"")
 end
