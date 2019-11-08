@@ -4,7 +4,7 @@ class PetsController < ApplicationController
   # GET /pets
   def index
     @pets = Pet.all
-
+    
     render json: @pets
   end
 
@@ -46,6 +46,6 @@ class PetsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def pet_params
-      params.require(:pet).permit(:name, :age, :species, :location)
+      params.require(:pet).permit(:name, :age, :breed, :location, :img)
     end
 end
