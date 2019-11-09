@@ -10,17 +10,22 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user
+    user_id = params[:id] 
+    if logged_in_user_id == user_id.to_i 
+      user = user.find(params[:id])
+      render json: user, include: :adoptions 
+    else 
+      render json: { go_away: true }, status: :unauthorized 
   end
 
   # POST /users
   def create
-    @user = User.new(user_params)
+    user = User.create(user_params)
 
-    if @user.save
-      render json: @user, status: :created, location: @user
+    if user.valid ?
+      render json: authentication_json(user.id)
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { errors: user.errors.full_messages }, status: unprocessable_entity
     end
   end
 
@@ -46,6 +51,6 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.require(:user).permit(:name, :username, :password_digest, :location)
+      params.permit(:name, :username, :password, :location)
     end
 end
