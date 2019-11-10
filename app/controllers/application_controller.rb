@@ -3,6 +3,7 @@ class ApplicationController < ActionController::API
     def create_token(user_id)
       JWT.encode({ user_id: user_id }, signing_secret, 'HS256')
     end
+    
     def user_id_from_token
       begin
         token = request.headers["Authorization"]
@@ -12,6 +13,7 @@ class ApplicationController < ActionController::API
         return nil
       end
     end
+
     def token_is_valid
       user_id_from_token != nil
     end
