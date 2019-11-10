@@ -3,11 +3,13 @@ class AdoptionsController < ApplicationController
 
   # GET /adoptions
   def index
-    @adoptions = Adoption.all
-
-    render json: @adoptions
+    if token_is_valid
+      adoptions = Adoption.all
+      render json: adoptions
+    else
+      render json: { go_away: true }, status: :unauthorized
+    end
   end
-
   # GET /adoptions/1
   def show
     render json: @adoption

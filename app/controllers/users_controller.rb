@@ -11,21 +11,22 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     user_id = params[:id] 
-    if logged_in_user_id == user_id.to_i 
-      user = user.find(params[:id])
+    if user_id_from_token == user_id.to_i 
+      user = user.find(user_id)
       render json: user, include: :adoptions 
     else 
       render json: { go_away: true }, status: :unauthorized 
+    end
   end
 
   # POST /users
   def create
-    user = User.create(user_params)
+    @user = User.new(user_params)
 
-    if user.valid ?
-      render json: authentication_json(user.id)
+    if @user.save
+      render json: @user, status: :created, location: @user
     else
-      render json: { errors: user.errors.full_messages }, status: unprocessable_entity
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
