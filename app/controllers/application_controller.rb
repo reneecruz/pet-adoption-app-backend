@@ -1,35 +1,23 @@
 class ApplicationController < ActionController::API
-
-    private 
-
-    def authentication_json(user_id) 
-        { token: make_token(user_id), user_id: user_id }
+    private
+    def create_token(user_id)
+      JWT.encode({ user_id: user_id }, signing_secret, 'HS256')
     end
-
-    # in order to log in 
-
-    def make_token(user_id) 
-        payload = { user_id: user_id }
-        JWT.encode(payload, hmac_secret, "HS256")
-    end
-
-    # in order to authorize 
-
-    def logged_in_user_id 
+    def user_id_from_token
+      begin
         token = request.headers["Authorization"]
-        begin
-            decoded_payload = JWT.decode(token, hmac_secret, true, { algorithm: "HS256" })
-        rescue 
-            return nil
-        end
+        decoded_token = JWT.decode(token, signing_secret, true, { algorithm: 'HS256' })
+        return decoded_token.first["user_id"]
+      rescue
+        return nil
+      end
+    end
+    def token_is_valid
+      user_id_from_token != nil
     end
 
-    def logged_in? 
-        !!logged_in_user_id
-    end
 
-    def hmac_secret 
-        ENV["JWT_SECRET_KEY"]
+    def signing_secret
+      ENV['JWT_SECRET_KEY']
     end
-
-end
+   end
