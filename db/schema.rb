@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_215301) do
     t.string "username"
     t.string "password_digest"
     t.string "location"
+    t.string "gender"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
