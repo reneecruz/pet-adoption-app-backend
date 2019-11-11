@@ -3,12 +3,9 @@ class AdoptionsController < ApplicationController
 
   # GET /adoptions
   def index
-    if token_is_valid
-      adoptions = Adoption.all
-      render json: adoptions
-    else
-      render json: { go_away: true }, status: :unauthorized
-    end
+    @adoption = Adoption.all
+
+    render json: @adoption
   end
   # GET /adoptions/1
   def show
@@ -17,12 +14,13 @@ class AdoptionsController < ApplicationController
 
   # POST /adoptions
   def create
-    @adoption = Adoption.new(adoption_params)
+    # byebug 
+    adoption = Adoption.create(adoption_params)
 
-    if @adoption.save
-      render json: @adoption, status: :created, location: @adoption
+    if adoption.valid?
+      render json: adoption, status: :created, location: adoption
     else
-      render json: @adoption.errors, status: :unprocessable_entity
+      render json:{errors: adoption.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
@@ -48,6 +46,6 @@ class AdoptionsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def adoption_params
-      params.require(:adoption).permit(:user_id, :pet_id)
+      params.permit(:user_id, :pet_id)
     end
 end
