@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   def show
     user_id = params[:id] 
     if user_id_from_token == user_id.to_i 
-      user = user.find(user_id)
+      user = User.find(user_id)
       render json: user, include: :adoptions 
     else 
       render json: { go_away: true }, status: :unauthorized 
