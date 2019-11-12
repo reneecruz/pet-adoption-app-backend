@@ -18,7 +18,7 @@ class AdoptionsController < ApplicationController
     adoption = Adoption.create(adoption_params)
 
     if adoption.valid?
-      render json: adoption, status: :created, location: adoption
+      render json: adoption.pet, status: :created, location: adoption
     else
       render json:{errors: adoption.errors.full_messages}, status: :unprocessable_entity
     end
