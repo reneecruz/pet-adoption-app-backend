@@ -1,5 +1,5 @@
 class AdoptionSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :user, :pet
 
   belongs_to :user 
   belongs_to :pet
